@@ -16,19 +16,25 @@ rediscloud_service = json.loads(os.environ['VCAP_SERVICES'])['rediscloud'][0]
 credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 
+r.set('connectionsK', '0')
+
 @app.route('/')
 def hello():
         global counterK 
-	counterK = counterK +1
+	global connectionsvarK
+        counterK = counterK +1
+        r.incr ('connectionsK')
         return """
 	<html>
 	<body bgcolor="{}">
 
 	<center><h1><font color="white">Hi, I'm GUID:<br/>
 	{}
-        <center><h1><font color="white">Page Hits:<br/>
+        <center><h1><font color="white">Page Hits for this deploy:<br/>
         {}
 	</center>
+        <center><h1><font color="white">GLOBAL Page Hits:<br/>
+       
 
 	</body>
 	</html>

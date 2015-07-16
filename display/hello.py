@@ -3,6 +3,7 @@ import uuid
 import redis
 import urlparse
 import json
+import socket
 
 from flask import Flask
 app = Flask(__name__)
@@ -18,13 +19,18 @@ r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password
 
 #r.set('connectionsK', '0')
 
+whoareyouK = "NO ONE"
+
+
 @app.route('/')
 def hello():
         global counterK 
 	global connectionsvarK
+        global whoareyouK
         counterK = counterK +1
         r.incr ('connectionsK')
         connectionsvarK = r.get('connectionsK')
+        whoareyouK = socket.gethostname()
         return """
 	<html>
 	<body bgcolor="{}">
@@ -36,9 +42,11 @@ def hello():
 	</center>
         <center><h1><font color="white">GLOBAL Page Hits:<br/>
         {}
+       <center><h2><small><font color="white">My hostname is:<br/>
+        {}
 	</body>
 	</html>
-	""".format(COLOR,my_uuid, counterK,connectionsvarK)
+	""".format(COLOR,my_uuid, counterK,connectionsvarK,whoareyouK)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('VCAP_APP_PORT', '5000')))

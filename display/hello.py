@@ -24,6 +24,7 @@ def hello():
 	global connectionsvarK
         counterK = counterK +1
         r.incr ('connectionsK')
+        connectionsvarK = r.get('connectionsK')
         return """
 	<html>
 	<body bgcolor="{}">
@@ -34,11 +35,10 @@ def hello():
         {}
 	</center>
         <center><h1><font color="white">GLOBAL Page Hits:<br/>
-       
-
+        {}
 	</body>
 	</html>
-	""".format(COLOR,my_uuid, counterK)
+	""".format(COLOR,my_uuid, counterK,connectionsvarK)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0', port=int(os.getenv('VCAP_APP_PORT', '5000')))

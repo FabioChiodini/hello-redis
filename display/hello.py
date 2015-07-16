@@ -1,6 +1,9 @@
 import os
 import uuid
 import redis
+import urlparse
+import json
+
 from flask import Flask
 app = Flask(__name__)
 my_uuid = str(uuid.uuid1())
@@ -8,6 +11,10 @@ BLUE = "#0099FF"
 GREEN = "#33CC33"
 counterK = 0
 COLOR = BLUE
+
+rediscloud_service = json.loads(os.environ['VCAP_SERVICES'])['rediscloud'][0]
+credentials = rediscloud_service['credentials']
+r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 
 @app.route('/')
 def hello():

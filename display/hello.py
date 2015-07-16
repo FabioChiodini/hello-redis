@@ -16,7 +16,7 @@ rediscloud_service = json.loads(os.environ['VCAP_SERVICES'])['rediscloud'][0]
 credentials = rediscloud_service['credentials']
 r = redis.Redis(host=credentials['hostname'], port=credentials['port'], password=credentials['password'])
 
-r.set('connectionsK', '0')
+#r.set('connectionsK', '0')
 
 @app.route('/')
 def hello():
